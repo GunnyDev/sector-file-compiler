@@ -1,0 +1,265 @@
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+@font-face {
+  font-family: 'din';
+  src: url("../Font/DIN.otf") format("opentype");
+}
+
+html, body {
+  font-family: 'din', Helvetica, Arial, sans-serif;
+}
+
+a, .btn-link {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-row {
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.main {
+  flex: 1;
+  background-image: linear-gradient( 180deg, rgb(23, 55, 94) 0%, #25ADE3 70%);
+}
+
+  .main .terminal {
+  margin-top: 1rem;
+  }
+.xterm {
+    height: 520px;
+}
+
+.main .top-row {
+  justify-content: flex-end;
+}
+
+    .main .top-row > a, .main .top-row .btn-link {
+      white-space: nowrap;
+      margin-left: 1.5rem;
+    }
+
+    .main .top-row a:first-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+.sidebar {
+  background-image: linear-gradient(180deg, rgb(23, 55, 94) 0%, #25ADE3 70%);
+}
+
+  .sidebar .card {
+      border: none;
+  }
+
+  .sidebar .card .form-check-input:checked {
+    background-color: #17375E;
+    border-color: #17375E;
+  }
+
+  .sidebar .card .form-check-input {
+    border-color: #17375E;
+  }
+
+  .sidebar .card .input-group {
+    width: 20rem;
+  }
+
+  .sidebar .card .input-group-text {
+    color: white;
+    background-color: #0dcaf0;
+    border-color: #17375E;
+  }
+
+  .sidebar .card .form-control {
+    border-color: #17375E;
+  }
+  .sidebar .card-header {
+  background-image: linear-gradient( 154deg, rgb(23, 55, 94) 31%, #25ADE3 79%);
+  color: white;
+}
+
+  .sidebar .navbar-brand {
+    font-size: 1.1rem;
+  }
+
+  .sidebar .oi {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    top: -2px;
+  }
+
+  .sidebar .nav-item {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .sidebar .navbar-brand .logo {
+    height: 40px;
+    margin-left: 2rem;
+  }
+
+  .sidebar .nav-item:first-of-type {
+    padding-top: 1rem;
+  }
+
+  .sidebar .nav-item:last-of-type {
+    padding-bottom: 1rem;
+  }
+
+.sidebar .configCard {
+  margin: 2rem;
+  height: 275px;
+}
+
+  .sidebar .configCard .selectFilesBtn {
+    margin-left: 2rem;
+    color: white;
+  }
+
+.compileBtn {
+  color: white;
+  background-color: #17375E;
+}
+.sidebar .configOptions {
+  margin: 2rem;
+}
+
+
+  .sidebar .nav-item a {
+    color: #d7d7d7;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+  }
+
+    .sidebar .nav-item a.active {
+      background-color: rgba(255,255,255,0.25);
+      color: white;
+    }
+
+    .sidebar .nav-item a:hover {
+      background-color: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+.btn-info:disabled {
+  color: white;
+  background-color: #25ADE3;
+}
+.content {
+  padding-top: 1.1rem;
+}
+
+.navbar-toggler {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.valid.modified:not([type=checkbox]) {
+  outline: 1px solid #26b050;
+}
+
+.invalid {
+  outline: 1px solid red;
+}
+
+.validation-message {
+  color: red;
+}
+
+#blazor-error-ui {
+  background: lightyellow;
+  bottom: 0;
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+  display: none;
+  left: 0;
+  padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+}
+
+  #blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+  }
+
+@media (max-width: 767.98px) {
+  .main {
+    width: 100vh;
+    height: 100vh;
+  }
+
+  .sidebar {
+    width: 100vh;
+    height: 100vh;
+  }
+
+  .main .top-row:not(.auth) {
+    display: none;
+  }
+
+  .main .top-row.auth {
+    justify-content: space-between;
+  }
+
+  .main .top-row a, .main .top-row .btn-link {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  app {
+    flex-direction: row;
+  }
+
+  .main {
+    width: 100vh;
+    height: 100vh;
+  }
+
+    .main .termminal {
+      width: 95vh;
+    }
+  .sidebar {
+    width: 80vh;
+    height: 100vh;
+    top: 0;
+  }
+
+  .main .top-row {
+    top: 0;
+  }
+
+  .main > div {
+    padding-left: 2rem !important;
+    padding-right: 1.5rem !important;
+  }
+
+  .navbar-toggler {
+    display: none;
+  }
+
+  .sidebar .collapse {
+    /* Never collapse the sidebar for wide screens */
+    display: block;
+  }
+}

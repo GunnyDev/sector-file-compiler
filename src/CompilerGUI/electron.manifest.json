@@ -1,0 +1,45 @@
+{
+  "executable": "CompilerGUI",
+  "splashscreen": {
+    "imageFile": ""
+  },
+  "name": "CompilerGUI",
+  "author": "Kevin Gunn",
+  "copyright": "Copyright � 2021",
+  "singleInstance": false,
+  "environment": "Production",
+  "build": {
+    "appId": "com.CompilerGUI.app",
+    "productName": "CompilerGUI",
+    "copyright": "Copyright © 2020",
+    "buildVersion": "1.0.0",
+    "compression": "maximum",
+    "win": {
+      "icon": "/wwwroot/icons/win/complier.ico"
+    },
+    "mac": {
+      "icon": "/wwwroot/icons/mac/complier.icns"
+    },
+    "linux": {
+      "icon": "/wwwroot/icons"
+    },
+    "directories": {
+      "output": "../../../bin/Desktop"
+    },
+    "extraResources": [
+      {
+        "from": "./bin",
+        "to": "bin",
+        "filter": [ "**/*" ]
+      }
+    ],
+    "files": [
+      {
+        "from": "./ElectronHostHook/node_modules",
+        "to": "ElectronHostHook/node_modules",
+        "filter": [ "**/*" ]
+      },
+      "**/*"
+    ]
+  }
+}

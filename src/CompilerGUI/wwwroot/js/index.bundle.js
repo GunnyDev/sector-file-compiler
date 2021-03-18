@@ -1,0 +1,1 @@
+(()=>{var i;window.setTerminal=()=>{(i=new Terminal({cursorBlink:!0})).open(document.getElementById("terminal")),fitAddon=new FitAddon.FitAddon,i.loadAddon(fitAddon),fitAddon.fit(),i.writeln("Vatsim UK Sector File Compiler..")},window.writeLine=n=>{i.writeln(n)},window.initalise=()=>{setTerminal()}})();

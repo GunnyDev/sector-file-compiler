@@ -235,3 +235,38 @@ The `@preserveComment` annotation will force the compiler to keep the comments e
 ; @preserveComment This comment will be preserved
 ; This comment will not
 ```
+# Compiler GUI
+The compiler GUI is a .Net Core 5, Blazor App wrapped in Electron and can be build for Windows, Linux and macOS.
+
+## Development Setup
+
+Download the ElectronNET.CLI by running the below command:
+```
+dotnet tool install ElectronNET.CLI -g
+```
+
+### To run the App locally 
+1. Open a command prompt and change directory to the directory where the CompilerGUI Project resides locally.
+2. Run the following command ```electronize start``` or ```electronize start /watch``` for automatic re-compilation
+
+### Debug
+1. Start your with one of the above  start commands. 
+2. In Visual Studio attach to the running application instance. Debug Menu and click on Attach to Process. 
+3. Attach to the ```CompilerGui``` process.
+
+### To Build the App
+
+#### Windows
+```
+ electronize build /target win
+```
+
+#### Linux - can only be built on Linux
+```
+ electronize build /target linux
+```
+
+#### macOs - can only be built on Linux
+```
+ electronize build /target osx
+```

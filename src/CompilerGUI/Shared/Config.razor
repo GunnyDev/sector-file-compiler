@@ -1,0 +1,151 @@
+@using Microsoft.JSInterop
+@using ElectronNET.API;
+@using ElectronNET.API.Entities;
+@using CompilerGUI.Models
+@using System.IO;
+@using System.Collections.ObjectModel;
+@using Compiler;
+@using Compiler.Argument;
+@using Compiler.Event;
+
+@inject IJSRuntime JSRuntime
+
+<div class="top-row pl-4 navbar navbar-dark">
+  <a class="navbar-brand" href=""><img src="img/vatsim_uk_logo.png" class="logo" /></a>
+</div>
+<div>
+  <div class="card configCard">
+    <div class="card-header">
+      Select Config Files
+      <button type="button" class="btn btn-info selectFilesBtn" @onclick="selectFiles">Select</button>
+    </div>
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Filename</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var file in ConfigFiles)
+          {
+          <tr>
+            <td><button type="button" class="btn-close" aria-label="Close" @onclick="(() => removeFile(file.FileName))"></button></td>
+            <td>@file.FileName</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card configOptions">
+    <div class="card-header">
+      Compiler Options
+    </div>
+    <div class="card-body">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="validate" @bind="ValidateOutput">
+        <label class="form-check-label" for="validate">Validate Output</label>
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="stripComments" @bind="StripComments">
+        <label class="form-check-label" for="stripComments">Strip Out Comments</label>
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Build Version</span>
+        <input type="text" class="form-control" placeholder="Build Version" aria-label="Build Version" aria-describedby="basic-addon1" id="buildVersion" @bind="Version">
+      </div>
+      <div class="compile">
+        <button type="button" class="btn btn-info compileBtn" @onclick="compile" disabled="@DisableCompile">Compile</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@code { private const string DefaultBuildVersion = "BUILD_VERSION";
+    private ObservableCollection<ConfigFile> ConfigFiles { get; set; }
+    private bool ValidateOutput { get; set; } = true;
+
+    private bool StripComments { get; set; }
+
+    private string Version { get; set; } = DefaultBuildVersion;
+
+    private bool DisableCompile { get; set; }
+
+    protected override void OnInitialized()
+    {
+      ConfigFiles = new();
+    }
+
+    private void compile()
+    {
+
+      DisableCompile = true;
+      CompilerArguments complierArgs = CompilerArgumentsFactory.Make();
+
+      foreach (ConfigFile file in ConfigFiles)
+      {
+        complierArgs.ConfigFiles.Add(file.Path);
+      }
+
+      complierArgs.ValidateOutput = ValidateOutput;
+      complierArgs.BuildVersion = Version;
+      complierArgs.StripComments = StripComments;
+
+      try
+      {
+        SectorFileCompilerFactory.Create(complierArgs,
+                                   new List<IEventObserver>()
+                                   {
+                                        new ConsoleWriter(JSRuntime)
+                                           }
+                                   ).Compile();
+      } catch (Exception ex)
+      {
+        ConsoleWriter exceptionWriter = new ConsoleWriter(JSRuntime);
+        exceptionWriter.Write(ex.Message);
+        DisableCompile = false;
+      }
+      DisableCompile = false;
+    }
+
+    private async void selectFiles()
+    {
+
+      if (HybridSupport.IsElectronActive)
+      {
+
+        var mainWindow = Electron.WindowManager.BrowserWindows.First();
+        var options = new OpenDialogOptions
+        {
+          Properties = new OpenDialogProperty[] {
+    OpenDialogProperty.openFile,
+    OpenDialogProperty.multiSelections
+    },
+          Filters = new FileFilter[] {
+    new FileFilter { Name = "JSON",
+    Extensions = new string[] {"json" } }
+    }
+        };
+
+        string[] files = await Electron.Dialog.ShowOpenDialogAsync(mainWindow, options);
+
+        foreach (string fileName in files)
+        {
+          ConfigFiles.Add(new ConfigFile(fileName, Path.GetFileName(fileName)));
+        }
+        DisableCompile = ConfigFiles.Count() < 1;
+        StateHasChanged();
+      }
+    }
+
+    private void removeFile(string fileName)
+    {
+      ConfigFile file = ConfigFiles.Where(c => c.FileName == fileName).First();
+      ConfigFiles.Remove(file);
+      DisableCompile = ConfigFiles.Count() < 1;
+      StateHasChanged();
+    } }
+
+
