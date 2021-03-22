@@ -1,0 +1,156 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- compiler-ui
+
+jobs:
+- job: Windows
+  dependsOn: Test
+  pool:
+    vmImage: 'windows-2019'
+
+  steps:
+
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: 5.0.102
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '12.x'
+
+  - script: dotnet tool install ElectronNET.CLI -g
+    displayName: Install Electron.Net CLI
+
+  - script: 'dotnet clean'
+    displayName: Clean Build
+
+  - script: electronize build /target win
+    workingDirectory: ./src/CompilerGUI
+    displayName: Build for Win-x64
+
+  - script: 'xcopy $(Build.SourcesDirectory)\src\CompilerGUI\bin\Desktop\"CompilerGUI Setup 1.0.0.exe" $(Build.ArtifactStagingDirectory)'
+    displayName: Copy CompilerGUI Setup 1.0.0.exe
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)\src\CompilerGUI\bin\Desktop\"CompilerGUI Setup 1.0.0.exe'
+      ArtifactName: 'drop'
+
+  - task: GitHubRelease@0
+    inputs:
+      gitHubConnection: github
+      repositoryName: GunnyDev/sector-file-compiler
+      action: edit
+      target: 'compiler-ui'
+      tagSource: manual
+      tag: '1.0.0'
+      title: '1.0.0'
+      assetUploadMode: 'replace'
+      isPreRelease: true
+      isDraft: false
+
+
+
+- job: Linux
+  dependsOn: Test
+  pool:
+    vmImage: 'ubuntu-16.04'
+
+  steps:
+
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: 5.0.102
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '12.x'
+
+  - script: dotnet tool install ElectronNET.CLI -g
+    displayName: Install Electron.Net CLI
+
+  - script: sudo npm install electron-builder --global
+    displayName: Install electron builder
+
+  - script: sudo chown -R $(whoami) ~/.npm
+    displayName: Reset permissions
+
+  - script: electronize build /target linux
+    workingDirectory: ./SilveR
+    displayName: Build for Linux
+
+  - script: 'cp $(Build.SourcesDirectory)/SilveR/bin/Desktop/InVivoStat-4.2.0.AppImage $(Build.ArtifactStagingDirectory)'  
+    displayName: Copy InVivoStat Setup 4.2.0.AppImage
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/InVivoStat-4.2.0.AppImage'
+      ArtifactName: 'drop'
+
+  - task: GitHubRelease@0
+    inputs:
+      gitHubConnection: github
+      repositoryName: robalexclark/SilveR
+      action: edit
+      target: 'master'
+      tagSource: manual
+      tag: '4.2.0'
+      title: '4.2.0'
+      assetUploadMode: 'replace'
+      isPreRelease: true
+      isDraft: false
+
+
+
+- job: MacOS
+  dependsOn: Test
+  pool:
+    vmImage: 'macOS-10.14'
+
+  steps:
+
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: 5.0.102
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '12.x'
+
+  - script: dotnet tool install ElectronNET.CLI -g
+    displayName: Install Electron.Net CLI
+
+  - script: sudo npm install electron-builder --global
+    displayName: Install electron-builder
+
+  - script: electronize build /target osx 
+    workingDirectory: ./SilveR
+    displayName: Build for MacOS
+
+  - script: 'cp $(Build.SourcesDirectory)/SilveR/bin/Desktop/InVivoStat-4.2.0.dmg $(Build.ArtifactStagingDirectory)'
+    displayName: Copy InVivoStat Setup 4.2.0.dmg
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/InVivoStat-4.2.0.dmg'
+      ArtifactName: 'drop'
+
+  - task: GitHubRelease@0
+    inputs:
+      gitHubConnection: github
+      repositoryName: robalexclark/SilveR
+      action: edit
+      target: 'master'
+      tagSource: manual
+      tag: '4.2.0'
+      title: '4.2.0'
+      assetUploadMode: 'replace'
+      isPreRelease: true
+      isDraft: false
