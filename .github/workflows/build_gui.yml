@@ -83,6 +83,29 @@ jobs:
           name: "CompilerGUI-linux-x64"
           path: "./src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.AppImage"
 
+  Build_GUI_MacOS:
+    runs-on: umacos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - run: npm ci
+
+      - name: Restore Nuget Packages
+        run: dotnet restore SectorFileCompiler.sln --packages packages
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: 5.0.x
+
+      - name: Install Electron .Net
+        run: dotnet tool install ElectronNET.CLI -g
+
       - name: Build for macOS
         working-directory: ./src/CompilerGUI
         run: electronize build /target osx
