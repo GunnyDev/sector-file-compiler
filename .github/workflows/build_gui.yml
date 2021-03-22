@@ -47,7 +47,7 @@ on:
           name: "CompilerGUI-linux-x64"
           path: "src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.AppImage"
 
-      - name: Build for macOs
+      - name: Build for macOS
         working-directory: .src/CompilerGUI
         run: electronize build /target osx
 
