@@ -54,5 +54,5 @@ on:
       - name: Upload macOS Assets
         uses: actions/upload-artifact@v2
         with:
-          name: "CompilerGUI-osx-x64"
-          path: "src/CompilerGUI/bin/Desktop/"CompilerGUI-1.0.0.dmg"
+          name: "CompilerGUI-linux-x64"
+          path: "src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.dmg"
