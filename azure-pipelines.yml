@@ -8,7 +8,6 @@ trigger:
 
 jobs:
 - job: Windows
-  dependsOn: Test
   pool:
     vmImage: 'windows-2019'
 
