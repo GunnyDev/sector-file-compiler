@@ -236,11 +236,16 @@ The `@preserveComment` annotation will force the compiler to keep the comments e
 ; This comment will not
 ```
 # Compiler GUI
-The compiler GUI is a .Net Core 5, Blazor App wrapped in Electron and can be build for Windows, Linux and macOS.
+The compiler GUI is a .Net Core 5, Blazor App wrapped in Electron and can be built for Windows, Linux and macOS.
 
 ## Development Setup
 
+#### Requirements
+* .Net 5 SDK
+* Node Version 14.3.0 or greater
+
 Download the ElectronNET.CLI by running the below command:
+
 ```
 dotnet tool install ElectronNET.CLI -g
 ```

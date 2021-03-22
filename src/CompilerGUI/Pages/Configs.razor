@@ -19,7 +19,7 @@
       Select Config Files
       <button type="button" class="btn btn-info selectFilesBtn" @onclick="selectFiles">Select</button>
     </div>
-    <div class="card-body">
+    <div class="card-body filesCardBody">
       <table class="table">
         <thead>
           <tr>
@@ -30,11 +30,10 @@
         <tbody>
           @foreach (var file in ConfigFiles)
           {
-          <tr>
-            <td><button type="button" class="btn-close" aria-label="Close" @onclick="(() => removeFile(file.FileName))"></button></td>
-            <td>@file.FileName</td>
-          </tr>
-          }
+    <tr>
+      <td><button type="button" class="btn-close" aria-label="Close" @onclick="(() => removeFile(file.FileName))"></button></td>
+      <td>@file.FileName</td>
+    </tr>}
         </tbody>
       </table>
     </div>
@@ -52,12 +51,14 @@
         <input class="form-check-input" type="checkbox" id="stripComments" @bind="StripComments">
         <label class="form-check-label" for="stripComments">Strip Out Comments</label>
       </div>
-      <div class="input-group mb-3">
+      <div class="input-group input-group-sm mb-3">
         <span class="input-group-text" id="basic-addon1">Build Version</span>
         <input type="text" class="form-control" placeholder="Build Version" aria-label="Build Version" aria-describedby="basic-addon1" id="buildVersion" @bind="Version">
       </div>
-      <div class="compile">
-        <button type="button" class="btn btn-info compileBtn" @onclick="compile" disabled="@DisableCompile">Compile</button>
+      <div class="row align-items-end compile">
+        <div class="col">
+          <button type="button" class="btn btn-info compileBtn" @onclick="compile" disabled="@DisableCompile">Compile</button>
+        </div>
       </div>
     </div>
   </div>
@@ -71,7 +72,7 @@
 
     private string Version { get; set; } = DefaultBuildVersion;
 
-    private bool DisableCompile { get; set; }
+    private bool DisableCompile { get; set; } = true;
 
     protected override void OnInitialized()
     {
@@ -82,6 +83,7 @@
     {
 
       DisableCompile = true;
+
       CompilerArguments complierArgs = CompilerArgumentsFactory.Make();
 
       foreach (ConfigFile file in ConfigFiles)
@@ -99,9 +101,10 @@
                                    new List<IEventObserver>()
                                    {
                                         new ConsoleWriter(JSRuntime)
-                                           }
+                                             }
                                    ).Compile();
-      } catch (Exception ex)
+      }
+      catch (Exception ex)
       {
         ConsoleWriter exceptionWriter = new ConsoleWriter(JSRuntime);
         exceptionWriter.Write(ex.Message);

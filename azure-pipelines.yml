@@ -1,0 +1,56 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- compiler-ui
+
+jobs:
+- job: Windows
+  dependsOn: Test
+  pool:
+    vmImage: 'windows-2019'
+
+  steps:
+
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: 5.0.102
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '12.x'
+
+  - script: dotnet tool install ElectronNET.CLI -g
+    displayName: Install Electron.Net CLI
+
+  - script: 'dotnet clean'
+    displayName: Clean Build
+
+  - script: electronize build /target win
+    workingDirectory: ./src/CompilerGUI
+    displayName: Build for Win-x64
+
+  - script: 'xcopy $(Build.SourcesDirectory)\src\CompilerGUI\bin\Desktop\"CompilerGUI Setup 1.0.0.exe" $(Build.ArtifactStagingDirectory)'
+    displayName: Copy CompilerGUI Setup 1.0.0.exe
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.SourcesDirectory)\src\CompilerGUI\bin\Desktop\"CompilerGUI Setup 1.0.0.exe'
+      ArtifactName: 'drop'
+
+  - task: GitHubRelease@0
+    inputs:
+      gitHubConnection: 'github.com_GunnyDev'
+      repositoryName: 'GunnyDev/sector-file-compiler'
+      action: 'edit'
+      target: 'compiler-ui'
+      tag: '1.0.0'
+      title: '1.0.0'
+      assetUploadMode: 'replace'
+      isPreRelease: true
+      changeLogCompareToRelease: 'lastFullRelease'
+      changeLogType: 'commitBased'
+
