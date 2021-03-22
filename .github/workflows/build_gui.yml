@@ -21,8 +21,12 @@ jobs:
       - name: Restore Nuget Packages
         run: dotnet restore SectorFileCompiler.sln --packages packages
 
-      - name: Run Build
-        run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: 5.0.x
+#      - name: Run Build
+ #       run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
 
       - name: Install Electron .Net
         run: dotnet tool install ElectronNET.CLI -g
