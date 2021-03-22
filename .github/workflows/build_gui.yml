@@ -38,7 +38,7 @@ jobs:
           prerelease: true
 
       - name: Build for Windows
-        working-directory: .src/CompilerGUI
+        working-directory: .\src\CompilerGUI
         run: electronize build /target win
 
       - name: Upload Windows Assets
@@ -48,7 +48,7 @@ jobs:
           path: "src/CompilerGUI/bin/Desktop/CompilerGUI Setup 1.0.0.exe"
 
       - name: Build for Linux
-        working-directory: .src/CompilerGUI
+        working-directory: .\src\CompilerGUI
         run: electronize build /target linux
 
       - name: Upload Linux Assets
@@ -58,7 +58,7 @@ jobs:
           path: "src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.AppImage"
 
       - name: Build for macOS
-        working-directory: .src/CompilerGUI
+        working-directory: .\src\CompilerGUI
         run: electronize build /target osx
 
       - name: Upload macOS Assets
