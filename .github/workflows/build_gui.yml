@@ -7,7 +7,6 @@ on:
   pull_request:
 
 jobs:
-Crete
   Build_GUI_Windows:
     runs-on: wndows-latest
     steps:
@@ -52,22 +51,44 @@ Crete
           name: "CompilerGUI-windows-x64"
           path: "./src/CompilerGUI/bin/Desktop/CompilerGUI Setup 1.0.0.exe"
 
-#      - name: Build for Linux
-#        working-directory: ./src/CompilerGUI
-#        run: electronize build /target linux
+  Build_GUI_Linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - run: npm ci
 
-#      - name: Upload Linux Assets
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: "CompilerGUI-linux-x64"
-#          path: "./src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.AppImage"
+      - name: Restore Nuget Packages
+        run: dotnet restore SectorFileCompiler.sln --packages packages
 
-#      - name: Build for macOS
-#        working-directory: ./src/CompilerGUI
-#        run: electronize build /target osx
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: 5.0.x
 
-#      - name: Upload macOS Assets
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: "CompilerGUI-linux-x64"
-#          path: "./src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.dmg"
+      - name: Install Electron .Net
+        run: dotnet tool install ElectronNET.CLI -g
+
+      - name: Build for Linux
+        working-directory: ./src/CompilerGUI
+        run: electronize build /target linux
+
+      - name: Upload Linux Assets
+        uses: actions/upload-artifact@v2
+        with:
+          name: "CompilerGUI-linux-x64"
+          path: "./src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.AppImage"
+
+      - name: Build for macOS
+        working-directory: ./src/CompilerGUI
+        run: electronize build /target osx
+
+      - name: Upload macOS Assets
+        uses: actions/upload-artifact@v2
+        with:
+          name: "CompilerGUI-linux-x64"
+          path: "./src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.dmg"
