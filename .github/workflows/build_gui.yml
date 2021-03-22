@@ -35,7 +35,7 @@ on:
         uses: actions/upload-artifact@v2
         with:
           name: "CompilerGUI-windows-x64"
-          path: "src/CompilerGUI/bin/Desktop/"CompilerGUI Setup 1.0.0.exe"
+          path: "src/CompilerGUI/bin/Desktop/CompilerGUI Setup 1.0.0.exe"
 
       - name: Build for Linux
         working-directory: .src/CompilerGUI
@@ -45,7 +45,7 @@ on:
         uses: actions/upload-artifact@v2
         with:
           name: "CompilerGUI-linux-x64"
-          path: "src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.AppImage
+          path: "src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.AppImage"
 
       - name: Build for macOs
         working-directory: .src/CompilerGUI
@@ -55,4 +55,4 @@ on:
         uses: actions/upload-artifact@v2
         with:
           name: "CompilerGUI-osx-x64"
-          path: "src/CompilerGUI/bin/Desktop/"CompilerGUI-1.0.0.dmg
+          path: "src/CompilerGUI/bin/Desktop/"CompilerGUI-1.0.0.dmg"
