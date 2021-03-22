@@ -104,7 +104,7 @@ jobs:
           name: "CompilerGUI-osx-x64"
           path: "./src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.dmg"
 
-  Create_Release
+  Create_Release:
     runs-on: ubuntu-latest
     steps:
       - name: Create Release
