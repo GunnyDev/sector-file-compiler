@@ -1,0 +1,55 @@
+name: Build GUI
+
+on:
+  push:
+    branches:
+      - 'compiler-ui'
+  pull_request:
+
+  jobs:
+  Build_GUI_Windows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - run: npm ci
+
+      - name: Restore Nuget Packages
+        run: dotnet restore SectorFileCompiler.sln --packages packages
+
+      - name: Run Build
+        run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
+
+      - name: Install Electron .Net
+        run: dotnet tool install ElectronNET.CLI -g
+
+      - name: Build for Windows
+        run: electronize build /target win
+
+      - name: Upload Windows Assets
+        uses: actions/upload-artifact@v2
+        with:
+          name: "CompilerGUI-windows-x64"
+          path: "src\CompilerGUI\bin\Desktop\"CompilerGUI Setup 1.0.0.exe"
+
+      - name: Build for Linux
+        run: electronize build /target linux
+
+      - name: Upload Linux Assets
+        uses: actions/upload-artifact@v2
+        with:
+          name: "CompilerGUI-linux-x64"
+          path: "src\CompilerGUI\bin\Desktop\CompilerGUI-1.0.0.AppImage
+
+      - name: Build for Linux
+        run: electronize build /target linux
+
+      - name: Upload macOs Assets
+        uses: actions/upload-artifact@v2
+        with:
+          name: "CompilerGUI-osx-x64"
+          path: "src\CompilerGUI\bin\Desktop\"CompilerGUI-1.0.0.dmg
