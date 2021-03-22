@@ -6,7 +6,7 @@ on:
       - 'compiler-ui'
   pull_request:
 
-  jobs:
+jobs:
   Build_GUI_Windows:
     runs-on: ubuntu-latest
     steps:
@@ -26,6 +26,16 @@ on:
 
       - name: Install Electron .Net
         run: dotnet tool install ElectronNET.CLI -g
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: true
 
       - name: Build for Windows
         working-directory: .src/CompilerGUI
