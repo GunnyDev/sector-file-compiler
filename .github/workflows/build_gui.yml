@@ -106,6 +106,7 @@ jobs:
 
   Create_Release:
     runs-on: ubuntu-latest
+    needs: [Build_GUI_Windows, Build_GUI_Linux, Build_GUI_MacOS]
     steps:
       - name: Create Release
         id: create_release
@@ -113,7 +114,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: TEST
-          release_name: Release TEST
+          tag_name: 1.0.0
+          release_name: 1.0.0
           draft: false
           prerelease: true
