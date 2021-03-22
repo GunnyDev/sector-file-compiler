@@ -25,21 +25,9 @@ jobs:
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: 5.0.x
-#      - name: Run Build
- #       run: dotnet build /p:Configuration=Release SectorFileCompiler.sln --nologo --no-restore /warnaserror;
 
       - name: Install Electron .Net
         run: dotnet tool install ElectronNET.CLI -g
-#      - name: Create Release
-#        id: create_release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: TEST
-#          release_name: Release TEST
-#          draft: false
-#          prerelease: true
 
       - name: Build for Windows
         working-directory: ./src/CompilerGUI
@@ -113,5 +101,19 @@ jobs:
       - name: Upload macOS Assets
         uses: actions/upload-artifact@v2
         with:
-          name: "CompilerGUI-linux-x64"
+          name: "CompilerGUI-osx-x64"
           path: "./src/CompilerGUI/bin/Desktop/CompilerGUI-1.0.0.dmg"
+
+  Create_Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: TEST
+          release_name: Release TEST
+          draft: false
+          prerelease: true
