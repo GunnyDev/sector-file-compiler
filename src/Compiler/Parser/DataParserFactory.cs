@@ -27,7 +27,7 @@ namespace Compiler.Parser
                     new FrequencyParser(108, 117, 50),
                     sectorElements,
                     logger
-                    ),
+                ),
                 InputDataType.SCT_NDBS => new NdbParser(new FrequencyParser(108, 950, 500), sectorElements, logger),
                 InputDataType.SCT_ARTCC => new ArtccParser(ArtccType.REGULAR, sectorElements, logger),
                 InputDataType.SCT_ARTCC_LOW => new ArtccParser(ArtccType.LOW, sectorElements, logger),
@@ -70,6 +70,8 @@ namespace Compiler.Parser
                 ),
                 InputDataType.ESE_VRPS => new VrpParser(sectorElements, logger),
                 InputDataType.ESE_GROUND_NETWORK => new GroundNetworkParser(sectorElements, logger),
+                InputDataType.ESE_RADAR2 => new RadarParser(sectorElements, logger),
+                InputDataType.ESE_RADAR_HOLE => new RadarHoleParser(sectorElements, logger),
                 _ => throw new NotImplementedException(
                     $"Parser not not implemented for input data type {file.DataType.ToString()}")
             };

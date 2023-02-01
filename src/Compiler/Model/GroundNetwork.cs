@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Compiler.Model
 {
@@ -25,7 +24,10 @@ namespace Compiler.Model
 
         public IEnumerable<ICompilableElement> GetCompilableElements()
         {
-            return Taxiways.Concat<ICompilableElement>(RunwayExits);
+            List<ICompilableElement> values = new();
+            Taxiways.ForEach(taxiway => values.AddRange(taxiway.GetCompilableElements()));
+            RunwayExits.ForEach(exit => values.AddRange(exit.GetCompilableElements()));
+            return values;
         }
     }
 }

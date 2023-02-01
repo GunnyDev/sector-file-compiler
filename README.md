@@ -32,7 +32,14 @@ times, then the compiler will attempt to merge the configs together.
 
 ### Optional
 
-`--skip-validation` - If set, the compiler will skip the post-parse validation phase of compilation,
+`--check-config` - If set, only runs the configuration checking step to ensure that the compiler config is correct.
+
+`--lint` - If set, only runs the configuration check and linting steps.
+
+`--validate` - If set, only runs the configuration check, linting and post-validation steps. Does not output files.
+
+`--skip-validation` - If set, the compiler will skip the post-parse validation phase of compilation.
+If running in full compilation mode, will still produce output.
 
 `--strip-comments` - If set, any comments in the input will be removed. If an empty line is leftover, it will be discarded.
 
@@ -90,6 +97,15 @@ can be specified on the commandline, as follows:
 }
 ```
 
+#### Empty Folders
+
+The `empty_folder` option takes a single string. It determines what the compiler should do in the event that
+it comes across a Folder inclusion rule with no files found. Valid values are:
+
+- `ignore` - Default, do nothing.
+- `warn` - Raise a warning message in the output, but continue compilation.
+- `error` - Raise a fatal error that halts compilation.
+
 ### Include Files
 
 The input files that the compiler should parse are specified in the `include` key of the compiler
@@ -114,6 +130,7 @@ Valid keys in each airports object are as follows:
   "positions": {},
   "positions_mentor": {},
   "sid_airspace": {},
+  "star_airspace": {},
   "runways": {},
   "sectors": {},
   "sids": {},
@@ -186,7 +203,8 @@ This rule includes files as listed in the configuration file.
         "Basic.txt"
     ],
     "ignore_missing": true,
-    "except_where_exists": "Basic2.txt"
+    "except_where_exists": "Basic2.txt",
+    "exclude_directory": "EGAC"
 }
 ```
 There are two optional flags available for the file list rule:
@@ -195,6 +213,8 @@ There are two optional flags available for the file list rule:
 if it cannot be found (would usually cause an error). This is useful for airports where not all airports have all files.
 - `except_where_exists`instructs the compiler to skip the files, if another file is present.
 This is particularly useful for SMRs and Ground Maps.
+- `exclude_directory` useful for processing airport ownership data. Excludes a particular directory from
+the rule.
   
 #### Folders
 
