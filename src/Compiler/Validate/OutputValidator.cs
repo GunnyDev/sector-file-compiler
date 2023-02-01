@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Compiler.Model;
 using Compiler.Event;
 using Compiler.Argument;
@@ -16,7 +17,6 @@ namespace Compiler.Validate
             new AllColoursMustHaveAUniqueId(),
             new AllFixesMustBeUnique(),
             new AllSidsMustBeUnique(),
-            new AllSidsMustHaveAValidAirport(),
             new AllSidsMustHaveAValidRoute(),
             new AllSctSidsMustHaveAValidRoute(),
             new AllSctStarsMustHaveAValidRoute(),
@@ -40,6 +40,8 @@ namespace Compiler.Validate
             new AllSectorsMustHaveValidOwner(),
             new AllSectorsMustHaveValidAltOwner(),
             new AllSectorsMustHaveValidBorder(),
+            new AllSectorsBordersMustBeSingleIfCircle(),
+            new AllSectorBordersMustBeContiguous(),
             new AllSectorsMustHaveValidActiveAirport(),
             new AllSectorsMustHaveValidActiveRunway(),
             new AllSectorsMustHaveValidGuestAirports(),
@@ -53,15 +55,30 @@ namespace Compiler.Validate
             new AllActiveRunwaysMustReferenceAnAirport(),
             new AllActiveRunwaysMustReferenceARunway(),
             new AllActiveRunwaysMustBeUnique(),
-            new AllRunwayExitsMustHaveAValidRunway()
+            new AllRunwayExitsMustHaveAValidRunway(),
+            new OwnersMayOnlyAppearOnceInSectorOwnership(),
+            new AltOwnersMayOnlyAppearOnceInEachAltOwnershipLine(),
+            new AllSidsMustHaveAValidRunway()
         };
 
         public static void Validate(SectorElementCollection sectorElements, CompilerArguments args, IEventLogger events)
         {
+            var tasks = new List<Task>();
             foreach (IValidationRule rule in ValidationRules)
             {
-                rule.Validate(sectorElements, args, events);
+                tasks.Add(RunValidationTask(rule, sectorElements, args, events));
             }
+
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        private static Task RunValidationTask(
+            IValidationRule rule,
+            SectorElementCollection sectorElements,
+            CompilerArguments args,
+            IEventLogger eventLogger
+        ) {
+            return Task.Factory.StartNew(() => rule.Validate(sectorElements, args, eventLogger));
         }
     }
 }

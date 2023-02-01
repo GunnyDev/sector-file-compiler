@@ -7,6 +7,10 @@ namespace Compiler.Argument
 {
     public class CompilerArguments
     {
+        public const int EmptyFolderIgnore = 0;
+        public const int EmptyFolderWarning = 1;
+        public const int EmptyFolderError = 2;
+
         public const string DefaultBuildVersion = "BUILD_VERSION";
 
         public List<string> ConfigFiles { get; } = new();
@@ -30,7 +34,7 @@ namespace Compiler.Argument
             // Different length, so definitely not equal
             if (ConfigFiles.Count != compare.ConfigFiles.Count)
             {
-                return false ;
+                return false;
             }
 
             // Check every one is equal.
@@ -44,7 +48,7 @@ namespace Compiler.Argument
 
             return true;
         }
-        
+
         public override int GetHashCode()
         {
             return base.GetHashCode();
@@ -61,8 +65,14 @@ namespace Compiler.Argument
 
         // Replace tokens in the output
         public List<ITokenReplacer> TokenReplacers { get; } = new();
-        
+
         // The version being built
         public string BuildVersion { get; set; } = DefaultBuildVersion;
+
+        // What to do about empty folders
+        public int EmptyFolderAction { get; set; } = EmptyFolderIgnore;
+
+        // What mode should we run in.
+        public RunMode Mode { get; set; } = RunMode.COMPILE;
     }
 }
