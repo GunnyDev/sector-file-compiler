@@ -5,7 +5,7 @@
   },
   "name": "CompilerGUI",
   "author": "Kevin Gunn",
-  "copyright": "Copyright � 2021",
+  "copyright": "Copyright � 2023",
   "singleInstance": false,
   "environment": "Production",
   "build": {
@@ -18,7 +18,7 @@
       "output": "../../../bin/Desktop"
     },
     "win": {
-      "icon": "../../../build/icon.png",
+      "icon": "bin/build/icon.ico",
       "extraResources": [
         {
           "from": "./bin",
@@ -36,7 +36,7 @@
       ]
     },
     "mac": {
-      "icon": "../../../build/icon.png",
+      "icon": "bin/build/icon.png",
       "hardenedRuntime": true,
       "entitlements": "../../../build/entitlements.mac.inherit.plist",
       "target": [ "dmg", "zip" ],
@@ -57,7 +57,7 @@
       ]
     },
     "linux": {
-      "icon": "../../../build/256x256.png",
+      "icon": "bin/build/256x256.png",
       "extraResources": [
         {
           "from": "./bin",

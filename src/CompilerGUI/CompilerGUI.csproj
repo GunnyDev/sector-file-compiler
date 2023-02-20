@@ -1,9 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp5.0</TargetFramework>
+    <ApplicationIcon>build\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ElectronNET.API" Version="11.5.1" />
+    <Content Include="build\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ElectronNET.API" Version="13.5.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\css\bootstrap\" />
@@ -18,6 +22,17 @@
     <Exec Command="npm install" WorkingDirectory="Npm" />
     <Exec Command="npm run build" WorkingDirectory="Npm" />
   </Target>
+	<ItemGroup>
+		<None Update="build\icon.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="build\256x256.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="build\icon.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
   <ItemGroup>
     <Content Update="electron.manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

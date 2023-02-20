@@ -17,7 +17,7 @@
   <div class="card configCard">
     <div class="card-header">
       Select Config Files
-      <button type="button" class="btn btn-info selectFilesBtn" @onclick="selectFiles">Select</button>
+      <button type="button" class="btn btn-info selectFilesBtn" @onclick="SelectFiles">Select</button>
     </div>
     <div class="card-body filesCardBody">
       <table class="table">
@@ -31,7 +31,7 @@
           @foreach (var file in ConfigFiles)
           {
     <tr>
-      <td><button type="button" class="btn-close" aria-label="Close" @onclick="(() => removeFile(file.FileName))"></button></td>
+      <td><button type="button" class="btn-close" aria-label="Close" @onclick="(() => RemoveFile(file.FileName))"></button></td>
       <td>@file.FileName</td>
     </tr>}
         </tbody>
@@ -57,14 +57,15 @@
       </div>
       <div class="row align-items-end compile">
         <div class="col">
-          <button type="button" class="btn btn-info compileBtn" @onclick="compile" disabled="@DisableCompile">Compile</button>
+          <button type="button" class="btn btn-info compileBtn" @onclick="Compile" disabled="@DisableCompile">Compile</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-@code { private const string DefaultBuildVersion = "BUILD_VERSION";
+@code {
+    private const string DefaultBuildVersion = "BUILD_VERSION";
     private ObservableCollection<ConfigFile> ConfigFiles { get; set; }
     private bool ValidateOutput { get; set; } = true;
 
@@ -76,24 +77,31 @@
 
     protected override void OnInitialized()
     {
-      ConfigFiles = new();
+        ConfigFiles = new();
     }
 
-    private void compile()
+    private void Compile()
     {
 
-      DisableCompile = true;
+        DisableCompile = true;
 
-      CompilerArguments complierArgs = CompilerArgumentsFactory.Make();
+        CompilerArguments complierArgs = CompilerArgumentsFactory.Make();
 
-      foreach (ConfigFile file in ConfigFiles)
-      {
-        complierArgs.ConfigFiles.Add(file.Path);
-      }
+        foreach (ConfigFile file in ConfigFiles)
+        {
+            complierArgs.ConfigFiles.Add(file.Path);
+        }
 
-      complierArgs.ValidateOutput = ValidateOutput;
-      complierArgs.BuildVersion = Version;
-      complierArgs.StripComments = StripComments;
+        complierArgs.ValidateOutput = ValidateOutput;
+        complierArgs.BuildVersion = Version;
+        complierArgs.StripComments = StripComments;
+
+        if (ValidateOutput)
+        {
+            complierArgs.Mode = RunMode.VALIDATE;
+
+        }
+
 
       try
       {
@@ -113,7 +121,7 @@
       DisableCompile = false;
     }
 
-    private async void selectFiles()
+    private async void SelectFiles()
     {
 
       if (HybridSupport.IsElectronActive)
@@ -143,12 +151,13 @@
       }
     }
 
-    private void removeFile(string fileName)
+    private void RemoveFile(string fileName)
     {
       ConfigFile file = ConfigFiles.Where(c => c.FileName == fileName).First();
       ConfigFiles.Remove(file);
       DisableCompile = ConfigFiles.Count() < 1;
       StateHasChanged();
-    } }
+    } 
+}
 
 
