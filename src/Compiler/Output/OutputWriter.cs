@@ -30,5 +30,10 @@ namespace Compiler.Output
         {
             outputStream.Flush();
         }
+
+        public void Close()
+        {
+            outputStream.Close();
+        }
     }
 }

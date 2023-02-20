@@ -11,5 +11,7 @@
          * Flush the output stream
          */
         public void Flush();
+
+        public void Close();
     }
 }
