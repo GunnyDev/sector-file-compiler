@@ -283,15 +283,15 @@ dotnet tool install ElectronNET.CLI -g
 
 #### Windows
 ```
- electronize build /target win
+electronize build /target win /PublishSingleFile false
 ```
 
 #### Linux - can only be built on Linux
 ```
- electronize build /target linux
+ electronize build /target linux /PublishSingleFile false
 ```
 
-#### macOs - can only be built on Linux
+#### macOs - can only be built on MacOS
 ```
- electronize build /target osx
+ electronize build /target osx /PublishSingleFile false
 ```
