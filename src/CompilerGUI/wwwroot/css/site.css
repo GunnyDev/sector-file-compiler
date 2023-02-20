@@ -100,12 +100,11 @@ app {
     font-size: 1.1rem;
   }
 
-  .sidebar .oi {
-    width: 2rem;
-    font-size: 1.1rem;
-    vertical-align: text-top;
-    top: -2px;
-  }
+    .sidebar .oi {
+        width: 2rem;
+        font-size: 0.7rem;
+        vertical-align: text-top;
+    }
 
   .sidebar .nav-item {
     font-size: 0.9rem;
@@ -127,7 +126,7 @@ app {
 
 .sidebar .configCard {
   margin: 2rem;
-  height: 275px;
+  height: 200px;
 }
 
   .sidebar .configCard .selectFilesBtn {

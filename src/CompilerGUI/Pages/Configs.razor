@@ -11,69 +11,107 @@
 @inject IJSRuntime JSRuntime
 
 <div class="top-row pl-4 navbar navbar-dark">
-  <a class="navbar-brand" href=""><img src="img/vatsim_uk_logo.png" class="logo" /></a>
+    <a class="navbar-brand" href=""><img src="img/vatsim_uk_logo.png" class="logo" /></a>
 </div>
 <div>
-  <div class="card configCard">
-    <div class="card-header">
-      Select Config Files
-      <button type="button" class="btn btn-info selectFilesBtn" @onclick="SelectFiles">Select</button>
-    </div>
-    <div class="card-body filesCardBody">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col"></th>
-            <th scope="col">Filename</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach (var file in ConfigFiles)
-          {
-    <tr>
-      <td><button type="button" class="btn-close" aria-label="Close" @onclick="(() => RemoveFile(file.FileName))"></button></td>
-      <td>@file.FileName</td>
-    </tr>}
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card configOptions">
-    <div class="card-header">
-      Compiler Options
-    </div>
-    <div class="card-body">
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="validate" @bind="ValidateOutput">
-        <label class="form-check-label" for="validate">Validate Output</label>
-      </div>
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="stripComments" @bind="StripComments">
-        <label class="form-check-label" for="stripComments">Strip Out Comments</label>
-      </div>
-      <div class="input-group input-group-sm mb-3">
-        <span class="input-group-text" id="basic-addon1">Build Version</span>
-        <input type="text" class="form-control" placeholder="Build Version" aria-label="Build Version" aria-describedby="basic-addon1" id="buildVersion" @bind="Version">
-      </div>
-      <div class="row align-items-end compile">
-        <div class="col">
-          <button type="button" class="btn btn-info compileBtn" @onclick="Compile" disabled="@DisableCompile">Compile</button>
+    <div class="card configCard">
+        <div class="card-header">
+            Select Config File(s)
+            <button type="button" class="btn btn-info selectFilesBtn" @onclick="SelectFiles">Select</button>
         </div>
-      </div>
+        <div class="card-body filesCardBody">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Filename</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var file in ConfigFiles)
+                    {
+                        <tr>
+                            <td><button type="button" class="btn-close" aria-label="Close" @onclick="(() => RemoveFile(file.FileName))"></button></td>
+                            <td>@file.FileName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
+    <div class="card configOptions">
+        <div class="card-header">
+            Compiler Options
+        </div>
+        <div class="card-body">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="checkconfiguration" @bind="CheckConfiguration">
+                <label class="form-check-label" for="checkconfiguration">Check Configuration</label>
+                <span class ="oi oi-question-mark info-icon" data-toggle="tooltip" data-placement="right" title="If set, only runs the configuration checking step to ensure that the compiler config is correct." />
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="lintcheck" @bind="LintCheck">
+                <label class="form-check-label" for="lintcheck">Lint Check</label>
+                <span class="oi oi-question-mark info-icon" data-toggle="tooltip" data-placement="right" title="If set, only runs the configuration check and linting steps." />
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="validate" @bind="Validate">
+                <label class="form-check-label" for="validate">Validate</label>
+                <span class="oi oi-question-mark info-icon" data-toggle="tooltip" data-placement="right" title="If set, only runs the configuration check, linting and post-validation steps. Does not output files." />
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="skipValidation" @bind="ValidateOutput">
+                <label class="form-check-label" for="skipValidation">Skip Validation</label>
+                <span class="oi oi-question-mark info-icon" data-toggle="tooltip" data-placement="right" title="If set, the compiler will skip the post-parse validation phase of compilation. If running in full compilation mode, will still produce output." />
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="prettify" @bind="Prettify">
+                <label class="form-check-label" for="prettify">Prettify Output</label>
+                <span class="oi oi-question-mark info-icon" data-toggle="tooltip" data-placement="right" title="If set, the compiler will skip the post-parse validation phase of compilation. If running in full compilation mode, will still produce output." />
+            </div>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="stripComments" @bind="StripComments">
+                <label class="form-check-label" for="stripComments">Strip Out Comments</label>
+                <span class="oi oi-question-mark info-icon" data-toggle="tooltip" data-placement="right" title="f set, " large" elements such as SECTOR will have an extra newline inserted between them, in order to provide improved readability." />
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="basic-addon1">Build Version</span>
+                <input type="text" class="form-control" placeholder="{Version}" aria-label="Build Version" aria-describedby="basic-addon1" id="buildVersion" @bind="Version">
+                <span class="oi oi-question-mark info-icon-build" data-toggle="tooltip" data-placement="right" title="Takes a single argument. Specifies the version of the build to replace the {VERSION} token in the input." />
+            </div>
+            <div class="row align-items-end compile">
+                <div class="col">
+                    <button type="button" class="btn btn-info compileBtn" @onclick="Compile" disabled="@DisableCompile">Compile</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {
-    private const string DefaultBuildVersion = "BUILD_VERSION";
+    private const string DefaultBuildVersion = "VERSION";
+
     private ObservableCollection<ConfigFile> ConfigFiles { get; set; }
-    private bool ValidateOutput { get; set; } = true;
+
+    private SectorFileCompiler sectorFileCompiler;
+
+    private bool ValidateOutput { get; set; } = false;
+
+    private bool CheckConfiguration { get; set; } = false;
+
+    private bool LintCheck { get; set; } = false;
+
+    private bool Validate { get; set; } = false;
+
+    private bool Prettify { get; set; } = false;
 
     private bool StripComments { get; set; }
 
     private string Version { get; set; } = DefaultBuildVersion;
 
     private bool DisableCompile { get; set; } = true;
+
+    private int result { get; set; } = 0;
 
     protected override void OnInitialized()
     {
@@ -92,72 +130,101 @@
             complierArgs.ConfigFiles.Add(file.Path);
         }
 
-        complierArgs.ValidateOutput = ValidateOutput;
+        complierArgs.ValidateOutput = !ValidateOutput;
         complierArgs.BuildVersion = Version;
         complierArgs.StripComments = StripComments;
 
-        if (ValidateOutput)
+
+        if (CheckConfiguration)
+        {
+            complierArgs.Mode = RunMode.CHECK_CONFIG;
+        }
+
+
+        if (LintCheck)
+        {
+            complierArgs.Mode = RunMode.LINT;
+        }
+
+        if (Validate)
         {
             complierArgs.Mode = RunMode.VALIDATE;
 
         }
+        if(Prettify)
+        {
+            complierArgs.Pretty = Pretty.PRETTY;
+        }
 
 
-      try
-      {
-        SectorFileCompilerFactory.Create(complierArgs,
-                                   new List<IEventObserver>()
-                                   {
+        try
+        {
+            sectorFileCompiler = SectorFileCompilerFactory.Create(complierArgs,
+                                           new List<IEventObserver>()
+                                                   {
                                         new ConsoleWriter(JSRuntime)
-                                             }
-                                   ).Compile();
-      }
-      catch (Exception ex)
-      {
-        ConsoleWriter exceptionWriter = new ConsoleWriter(JSRuntime);
-        exceptionWriter.Write(ex.Message);
+                                                             }
+                                           );
+
+            result = sectorFileCompiler.Compile();
+        }
+        catch (Exception ex)
+        {
+            ConsoleWriter exceptionWriter = new ConsoleWriter(JSRuntime);
+            exceptionWriter.Write(ex.Message);
+            DisableCompile = false;
+        }
+
         DisableCompile = false;
-      }
-      DisableCompile = false;
+
+        foreach(var outputFile in complierArgs.OutputFiles)
+        {
+            var writer = outputFile.GetOutputStream();
+            writer.Close();
+        }
+        complierArgs.OutputFiles.Clear();
     }
 
     private async void SelectFiles()
     {
 
-      if (HybridSupport.IsElectronActive)
-      {
-
-        var mainWindow = Electron.WindowManager.BrowserWindows.First();
-        var options = new OpenDialogOptions
+        if (HybridSupport.IsElectronActive)
         {
-          Properties = new OpenDialogProperty[] {
-    OpenDialogProperty.openFile,
-    OpenDialogProperty.multiSelections
-    },
-          Filters = new FileFilter[] {
-    new FileFilter { Name = "JSON",
-    Extensions = new string[] {"json" } }
-    }
-        };
 
-        string[] files = await Electron.Dialog.ShowOpenDialogAsync(mainWindow, options);
+            var mainWindow = Electron.WindowManager.BrowserWindows.First();
 
-        foreach (string fileName in files)
-        {
-          ConfigFiles.Add(new ConfigFile(fileName, Path.GetFileName(fileName)));
+
+            var options = new OpenDialogOptions
+            {
+                    Properties = new OpenDialogProperty[] {
+                            OpenDialogProperty.openFile,
+                            OpenDialogProperty.multiSelections
+            },
+                    Filters = new FileFilter[] {
+                    new FileFilter { 
+                        Name = "JSON",
+                        Extensions = new string[] {"json" } }
+                    }
+            };
+
+            string[] files = await Electron.Dialog.ShowOpenDialogAsync(mainWindow, options);
+
+            foreach (string fileName in files)
+            {
+                ConfigFiles.Add(new ConfigFile(fileName, Path.GetFileName(fileName)));
+            }
+            DisableCompile = ConfigFiles.Count() < 1;
+            StateHasChanged();
         }
-        DisableCompile = ConfigFiles.Count() < 1;
-        StateHasChanged();
-      }
     }
 
     private void RemoveFile(string fileName)
     {
-      ConfigFile file = ConfigFiles.Where(c => c.FileName == fileName).First();
-      ConfigFiles.Remove(file);
-      DisableCompile = ConfigFiles.Count() < 1;
-      StateHasChanged();
-    } 
+        ConfigFile file = ConfigFiles.Where(c => c.FileName == fileName).First();
+        ConfigFiles.Remove(file);
+        DisableCompile = ConfigFiles.Count() < 1;
+        StateHasChanged();
+    }
 }
 
 
